@@ -118,7 +118,8 @@ them plainly and use a CSS/SVG placeholder instead.
   carries the answer → §Diagrams
 - **Screenshot** — the payload for the LOOK rule above; viewport, console
   errors, what `ok:false` means; `click` a control, `steps` to fill a form
-  or get past a sign-in → §Screenshot
+  or get past a sign-in, `send` to ask a chat or AI feature and read its
+  reply → §Screenshot
 - **Stock photos & video** — FREE real imagery (heroes, cards, backgrounds);
   never emoji-as-imagery → §Stock photos & video
 - **Account** — the owner's plan, credits, sessions, add-ons. Fetch it for every
@@ -294,7 +295,10 @@ curl -sX POST "$VIBEKIT_API_URL/api/v1/hosting/app/$VIBEKIT_APP_ID/agent/screens
 ```
 
 - `path` is a path on YOUR app ("/", "/about"), never a full URL. `viewport`:
-  `mobile` (default, 390px — how users actually see it) or `desktop`.
+  `mobile` (default, 390px), `tablet` (820px), `desktop` (1280px), or a NUMBER
+  of CSS pixels. **A layout bug lives at a WIDTH**: if they see it and you do
+  not, render at THEIRS (ask, or read it off their screenshot). Reply echoes
+  `width`.
 - `console_errors` non-empty = the page threw on load; buttons are dead even
   though curl returns 200. Fix before replying.
 - `ok:false` = the browser was unavailable, NOT that your page is broken. Say
@@ -324,8 +328,13 @@ curl -sX POST "$VIBEKIT_API_URL/api/v1/hosting/app/$VIBEKIT_APP_ID/agent/screens
 
 **A form, a sign-in, or anything behind one is verified with `steps`.** A
 click cannot fill a field or get past a login; a scripted interaction can.
-Each step is `{"fill":"<field text>","value":"…"}`, `{"click":"<control text>"}`
-or `{"press":"Enter"}`, run in order on one page load (max 8):
+Each step is `{"fill":"<field text>","value":"…"}`, `{"click":"<control text>"}`,
+`{"press":"Enter"}` or `{"send":"<field text>","value":"…"}`, run in order on one
+page load (max 8). **`send` is how a chat, an AI feature or any ask-and-answer
+flow is verified:** it types the message, submits it (the Send button, else
+Enter), waits up to 20s for the app to answer, and the step carries `reply`,
+the text that appeared. No reply is `verified:false`. A 401 or "could not
+answer" in `reply` is the app's real answer; quote it, do not call the AI live.
 
 ```bash
 curl -sX POST "$VIBEKIT_API_URL/api/v1/hosting/app/$VIBEKIT_APP_ID/agent/screenshot" \
@@ -405,8 +414,13 @@ curl -s "$VIBEKIT_API_URL/api/v1/hosting/app/$VIBEKIT_APP_ID/agent/account" \
   runs through VibeKit from credits. Never collect a key in chat.
 
 ## Database — managed Postgres, attached by YOU, not bought by them
-Workspace files and SQLite do not survive a redeploy. The moment the user needs
-data to persist across deploys or across devices, this is the answer.
+**The app's own disk persists.** The workspace is mounted read-write into the
+running container, so the starter's `lib/store.js` JSON files (and any SQLite
+file) survive deploys and restarts on every plan, Free included. Accounts,
+profiles, messages and history for a small app belong there (a few thousand
+records, one process), with no purchase. Never gate them on a database: build
+on the store, and name Postgres as the upgrade for SQL, many thousands of rows,
+or data shared with another system.
 
 ```bash
 # Is one already attached?
@@ -464,6 +478,11 @@ read it ("saved as `ADMIN_PASSWORD` — see it in your Environment"). A password
 the user pastes at you gets the same treatment: store it, confirm the name,
 never echo the value back.
 
+**A forgotten app password is yours to fix, not a refusal.** The app's own
+logins are the user's data: read the var names, set a fresh value with this API
+and say where to read it, or reset the account in the app's store; offer a
+reset flow if the app has none.
+
 **A key that "is set" but reads as missing is usually a NAME mismatch. Read the
 names before you guess** — values come back masked, so this is always safe.
 
@@ -494,7 +513,7 @@ frontend, like this:
 app.post('/api/chat', async (req, res) => {
   const r = await fetch(process.env.VIBEKIT_AI_URL, {
     method: 'POST',
-    headers: { 'Authorization': 'Bearer ' + process.env.VIBEKIT_AI_TOKEN,
+    headers: { Authorization: `Bearer ${process.env.VIBEKIT_AI_TOKEN}`,
                'Content-Type': 'application/json' },
     body: JSON.stringify({ messages: req.body.messages }),  // [{role,content}]
   });

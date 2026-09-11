@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Creator Agent</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #1a1a1a; color: #fff; min-height: 100vh; }
+    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+    h1 { font-size: 2rem; margin-bottom: 20px; }
+    .section { background: #252525; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+    .section h2 { font-size: 1.3rem; margin-bottom: 15px; }
+    .btn { display: inline-block; background: #ff6b35; color: #fff; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: background 0.2s; }
+    .btn:hover { background: #e55a2b; }
+    .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .card { background: #333; border-radius: 8px; overflow: hidden; padding: 16px; }
+    .card img { width: 100%; height: 140px; object-fit: cover; }
+    .card-info { padding: 12px; }
+    .card-info h3 { font-size: 1rem; margin-bottom: 4px; }
+    .card-info p { font-size: 0.85rem; color: #aaa; }
+    .progress-bar { height: 6px; background: #444; margin-top: 10px; }
+    .progress-fill { height: 100%; background: #ff6b35; width: 0%; transition: width 0.3s; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎬 YouTube Creator Agent</h1>
+
+    <!-- Idea Generation -->
+    <div class="section">
+      <h2>Idea Generator</h2>
+      <p>Describe your video concept and I'll generate a detailed plan.</p>
+      <textarea id="ideaInput" rows="4" placeholder="e.g., a 60-second cooking tutorial with close-ups of ingredients, step-by-step instructions, and upbeat background music"></textarea>
+    </div>
+
+    <!-- Video Clip Creation -->
+    <div class="section">
+      <h2>Create Video Clip</h2>
+      <p>Enter a prompt for a short video clip (4-8 seconds).</p>
+      <textarea id="clipPrompt" rows="4" placeholder="e.g., slow cinematic push-in on a warm coffee shop window during rain, neon reflections on wet pavement"></textarea>
+      <button class="btn" onclick="generateClip()">Generate Clip</button>
+    </div>
+
+    <!-- Music Generation -->
+    <div class="section">
+      <h2>Background Music</h2>
+      <p>Generate a royalty-free music track to pair with your video.</p>
+      <textarea id="musicPrompt" rows="4" placeholder="e.g., futuristic arcade menu theme, synthwave pads, arpeggiated bass, no vocals, seamless loop"></textarea>
+      <button class="btn" onclick="generateMusic()">Generate Music</button>
+    </div>
+
+    <!-- Image Generation -->
+    <div class="section">
+      <h2>Create Thumbnail</h2>
+      <p>Generate a custom thumbnail image for your video.</p>
+      <textarea id="thumbPrompt" rows="4" placeholder="e.g., minimal flat logo, coffee cup, warm orange on cream"></textarea>
+      <button class="btn" onclick="generateThumbnail()">Generate Thumbnail</button>
+    </div>
+
+    <!-- Video Assembly -->
+    <div class="section">
+      <h2>Assemble Video</h2>
+      <p>Combine your generated assets into a complete video.</p>
+      <div class="video-grid" id="videoGrid"></div>
+    </div>
+
+    <!-- Download / Export -->
+    <div class="section">
+      <h2>Download Assets</h2>
+      <button class="btn" onclick="downloadAll()">Download All Assets</button>
+      <button class="btn" onclick="uploadToYouTube()">Upload to YouTube</button>
+    </div>
+  </div>
+
+  <script>
+    // Mock functions - integrate with VibeKit APIs when deployed
+    function generateClip() {
+      alert("Clip generation will be implemented with VibeKit video generation API");
+    }
+    function generateMusic() {
+      alert("Music generation will be implemented with VibeKit music generation API");
+    }
+    function generateThumbnail() {
+      alert("Thumbnail generation will be implemented with VibeKit image generation API");
+    }
+    function downloadAll() {
+      alert("Download all assets will be implemented");
+    }
+    function uploadToYouTube() {
+      alert("Upload to YouTube will be integrated with VibeKit YouTube API");
+    }
+  </script>
+</body>
+</html>

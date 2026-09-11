@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open Source Resources - YouTube Creator Agent</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #1a1a1a; color: #fff; min-height: 100vh; }
+    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+    h1 { font-size: 2rem; margin-bottom: 20px; }
+    .section { background: #252525; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+    .section h2 { font-size: 1.3rem; margin-bottom: 15px; }
+    .section h3 { font-size: 1.1rem; margin: 15px 0 10px; color: #ff6b35; }
+    .category-tag { display: inline-block; background: #444; color: #aaa; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; margin-right: 8px; margin-bottom: 4px; }
+    .resource-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+    .resource-card { background: #333; border-radius: 8px; padding: 16px; }
+    .resource-card h4 { margin-bottom: 8px; font-size: 1rem; }
+    .resource-card a { color: #4da6ff; text-decoration: none; }
+    .resource-card a:hover { text-decoration: underline; }
+    .resource-card p { font-size: 0.85rem; color: #aaa; margin: 8px 0; }
+    .resource-card .tags { margin-top: 8px; }
+    .license { font-size: 0.75rem; color: #888; }
+    .description { font-size: 0.85rem; color: #aaa; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Open Source Resources</h1>
+    <p style="color: #aaa; margin-bottom: 20px;">Free and open source tools for YouTube content creation</p>
+
+    <!-- Video Editing -->
+    <div class="section">
+      <h2>🎬 Video Editing</h2>
+
+      <h3>DaVinci Resolve</h3>
+      <div class="resource-card">
+        <p class="description">Professional-grade video editing, color grading, VFX, and audio post-production. Free version includes most features.</p>
+        <div><a href="https://www.blackmagicdesign.com/products/davinciresolve/" target="_blank">Download DaVinci Resolve</a></div>
+        <div class="tags"><span class="category-tag">Professional</span><span class="license">License: Proprietary (free version)</span></div>
+      </div>
+
+      <h3>OpenShot Video Editor</h3>
+      <div class="resource-card">
+        <p class="description">Cross-platform video editor supporting unlimited tracks, 3D animated titles, keyframe animations, and over 50 languages.</p>
+        <div><a href="https://www.openshot.org/" target="_blank">openshot.org</a> · <a href="https://github.com/OpenShot/openshot-qt" target="_blank">Source</a></div>
+        <div class="tags"><span class="category-tag">Beginner</span><span class="license">License: GPLv3</span></div>
+      </div>
+
+      <h3>Shotcut</h3>
+      <div class="resource-card">
+        <p class="description">Free, open source video editor with wide format support, filters, transitions, and audio mixing tools.</p>
+        <div><a href="https://shotcut.org/" target="_blank">shotcut.org</a> · <a href="https://github.com/mltframework/shotcut" target="_blank">Source</a></div>
+        <div class="tags"><span class="category-tag">Intermediate</span><span class="license">License: GPLv3</span></div>
+      </div>
+
+      <h3>Kdenlive</h3>
+      <div class="resource-card">
+        <p class="description">Advanced video editor with multi-track editing, effects, and proxy editing workflow. Part of KDE.</p>
+        <div><a href="https://kdenlive.org/" target="_blank">kdenlive.org</a> · <a href="https://invent.kde.org/kde/kdenlive" target="_blank">Source</a></div>
+        <div class="tags"><span class="category-tag">Intermediate</span><span class="license">License: GPLv3</span></div>
+      </div>
+    </div>
+
+    <!-- Audio Editing -->
+    <div class="section">
+      <h2>🎵 Audio Editing & Music</h2>
+
+      <h3>Audacity</h3>
+      <div class="resource-card">
+        <p class="description">Multitrack audio editor supporting noise reduction, effects, and plugin support. Great for editing voiceovers.</p>
+        <div><a href="https://www.audacityteam.org/" target="_blank">audacityteam.org</a> · <a href="https://github.com/audacity/audacity" target="_blank">Source</a></div>
+        <div class="tags"><span class="category-tag">Beginner</span><span class="license">License: GPLv2</span></div>
+      </div>
+
+      <h3>LMMS (Linux MultiMedia Studio)</h3>
+      <div class="resource-card">
+        <p class="description">Digital audio workstation with piano roll, synthesizers, and samples. Create royalty-free background music.</p>
+        <div><a href="https://lmms.io/" target="_blank">lmms.io</a> · <a href="https://github.com/LMMS/lmms" target="_blank">Source</a></div>
+        <div class="tags"><span class="category-tag">Music Production</span><span class="license">License: GPLv2</span></div>
+      </div>
+
+      <h3>MuseScore</h3>
+      <div class="resource-card">
+        <p class="description">Create sheet music and generate MIDI/WAV audio. Export to audio files for video background music.</p>
+        <div><a href="https://musescore.org/" target="_blank">musescore.org</a> · <a href="https://github.com/musescore/MuseScore" target="_blank">Source</a></div>
+        <div class="tags"><span class="category-tag">Music Production</span><span class="license">License: GPLv3</span></div>
+      </div>
+
+      <h3>Ardour</h3>
+      <div class="resource-card">
+        <p class="description">Multitrack digital audio workstation for recording, editing, and mixing audio compositions.</p>
+        <div><a href="https://ardour.org/" target="_blank">ardour.org</a> · <a href="https://github.com/ardour/ardour" target="_blank">Source</a></div>
+        <div class="tags"><span class="category-tag">Professional</span><span class="license">License: GPLv3</span></div>
+      </div>
+    </div>
+
+    <!-- Graphics & Design -->
+    <div class="section">
+      <h2>🎨 Graphics & Design</h2>
+
+      <h3>GIMP</h3>
+      <div class="resource-card">
+        <p class="description">Image manipulation and editing software supporting layers, filters, and plugins. Great for custom thumbnails.</p>
+        <div><a href="https://www.gimp.org/" target="_blank">gimp.org</a> · <a href="https://gitlab.gnome.org/GNOME/gimp" target="_blank">Source</a></div>
+        <div class="tags"><span class="category-tag">Beginner</span><span class="license">License: GPLv3</span></div>
+      </div>
+
+      <h3>Inkscape</h3>
+      <div class="resource-card">
+        <p class="description">Vector graphics editor for creating SVG thumbnails, logos, and icons with professional typography tools.</p>
+        <div><a href="https://inkscape.org/" target="_blank">inkscape.org</a> · <a href="https://gitlab.com/inkscape/inkscape" target="_blank">Source</a></div>
+        <div class="tags"><span class="category-tag">Beginner</span><span class="license">License: GPLv3</span></div>
+      </div>
+
+      <h3>Blender</h3>
+      <div class="resource-card">
+        <p class="description">Full 3D creation suite for 3D animations, visual effects, motion tracking, and video editing.</p>
+        <div><a href="https://www.blender.org/" target="_blank">blender.org</a> · <a href="https://projects.blender.org/blender/blender" target="_blank">Source</a></div>
+        <div class="tags"><span class="category-tag">Professional</span><span class="license">License: GPLv3</span></div>
+      </div>
+
+      <h3>Krita</h3>
+      <div class="resource-card">
+        <p class="description">Digital painting and illustration software ideal for creating custom YouTube thumbnails and artwork.</p>
+        <div><a href="https://krita.org/" target="_blank">krita.org</a> · <a href="https://invent.kde.org/Kernel/krita" target="_blank">Source</a></div>
+        <div class="tags"><span class="category-tag">Beginner</span><span class="license">License: GPLv3</span></div>
+      </div>
+    </div>
+
+    <!-- Stock Media -->
+    <div class="section">
+      <h2>📸 Stock Media (Free)</h2>
+
+      <h3>Pexels</h3>
+      <div class="resource-card">
+        <p class="description">High-quality free stock photos and videos. No attribution required but appreciated.</p>
+        <div><a href="https://www.pexels.com/" target="_blank">pexels.com</a></div>
+        <div class="tags"><span class="category-tag">Photos</span><span class="category-tag">Videos</span><span class="license">Free license</span></div>
+      </div>
+
+      <h3>Pixabay</h3>
+      <div class="resource-card">
+        <p class="description">Over 2 million free stock photos, vectors, illustrations, and videos contributed by the community.</p>
+        <div><a href="https://pixabay.com/" target="_blank">pixabay.com</a></div>
+        <div class="tags"><span class="category-tag">Photos</span><span class="category-tag">Videos</span><span class="license">Pixabay License</span></div>
+      </div>
+
+      <h3>Unsplash</h3>
+      <div class="resource-card">
+        <p class="description">Beautiful, high-resolution photos from a generous community of photographers.</p>
+        <div><a href="https://unsplash.com/" target="_blank">unsplash.com</a></div>
+        <div class="tags"><span class="category-tag">Photos</span><span class="license">Unsplash License</span></div>
+      </div>
+
+      <h3>Videvo</h3>
+      <div class="resource-card">
+        <p class="description">Free HD stock videos, motion graphics, and After Effects templates for your projects.</p>
+        <div><a href="https://www.videvo.net/" target="_blank">videvo.net</a></div>
+        <div class="tags"><span class="category-tag">Videos</span><span class="license">Mixed licenses</span></div>
+      </div>
+
+      <h3>OpenGameArt</h3>
+      <div class="resource-card">
+        <p class="description">Open source game art, sounds, and music that can be used for video backgrounds and thumbnails.</p>
+        <div><a href="https://opengameart.org/" target="_blank">opengameart.org</a></div>
+        <div class="tags"><span class="category-tag">Sprites</span><span class="category-tag">Audio</span><span class="license">Mixed open licenses</span></div>
+      </div>
+    </div>
+
+    <!-- Text-to-Speech -->
+    <div class="section">
+      <h2>🗣️ Text-to-Speech (FOSS)</h2>
+
+      <h3>Coqui TTS</h3>
+      <div class="resource-card">
+        <p class="description">Deep learning toolkit for Text-to-Speech using state-of-the-artTacotron models. Fully open source.</p>
+        <div><a href="https://github.com/coqui-ai/TTS" target="_blank">GitHub · coqui-ai/TTS</a></div>
+        <div class="tags"><span class="category-tag">Python</span><span class="license">License: MPL-2.0</span></div>
+      </div>
+
+      <h3>Piper</h3>
+      <div class="resource-card">
+        <p class="description">Neural text-to-speech system focused on speed and privacy. Runs locally on your machine.</p>
+        <div><a href="https://github.com/rhasspy/piper" target="_blank">GitHub · rhasspy/piper</a></div>
+        <div class="tags"><span class="category-tag">C++</span><span class="license">License: MIT</span></div>
+      </div>
+    </div>
+
+    <!-- Subtitles -->
+    <div class="section">
+      <h2>📝 Subtitles & Captions</h2>
+
+      <h3>Aegisub</h3>
+      <div class="resource-card">
+        <p class="description">Subtitle editor with tools for timing, typesetting, and karaoke effects. Great for YouTube subtitles.</p>
+        <div><a href="https://aegisub.org/" target="_blank">aegisub.org</a> · <a href="https://github.com/Aegiverse/Aegisub" target="_blank">Source</a></div>
+        <div class="tags"><span class="category-tag">Subtitles</span><span class="license">License: GPL-3.0</span></div>
+      </div>
+
+      <h3>Subtitle Edit</h3>
+      <div class="resource-card">
+        <p class="description">Cross-platform subtitle editor with OCR, auto-transcription, and format conversion support.</p>
+        <div><a href="https://github.com/SubtitleEdit/subtitleedit" target="_blank">GitHub · SubtitleEdit</a></div>
+        <div class="tags"><span class="category-tag">Subtitles</span><span class="license">License: GPL-3.0</span></div>
+      </div>
+    </div>
+
+    <!-- Screen Recording -->
+    <div class="section">
+      <h2>🖥️ Screen Recording</h2>
+
+      <h3>OBS Studio</h3>
+      <div class="resource-card">
+        <p class="description">Open source software for video recording and live streaming. Record screens, webcams, and multiple sources.</p>
+        <div><a href="https://obsproject.com/" target="_blank">obsproject.com</a> · <a href="https://github.com/obsproject/obs-studio" target="_blank">Source</a></div>
+        <div class="tags"><span class="category-tag">Screen Capture</span><span class="category-tag">Streaming</span><span class="license">License: GPLv2</span></div>
+      </div>
+
+      <h3>Kazam</h3>
+      <div class="resource-card">
+        <p class="description">Simple screen recording tool for Linux that captures screen and audio, saves to file or streams live.</p>
+        <div><a href="https://launchpad.net/kazam" target="_blank">launchpad.net/kazam</a></div>
+        <div class="tags"><span class="category-tag">Linux</span><span class="license">License: GPLv3</span></div>
+      </div>
+    </div>
+
+    <!-- Analytics -->
+    <div class="section">
+      <h2>📊 YouTube Analytics</h2>
+
+      <h3>YT Analyzer</h3>
+      <div class="resource-card">
+        <p class="description">Open-source YouTube analytics dashboard that fetches subscriber count, view count, and performance metrics.</p>
+        <div><a href="https://github.com/philipperemy/yt-analyzer" target="_blank">GitHub · philipperemy/yt-analyzer</a></div>
+        <div class="tags"><span class="category-tag">Python</span><span class="category-tag">Analytics</span><span class="license">License: MIT</span></div>
+      </div>
+    </div>
+
+    <div style="color: #888; text-align: center; margin-top: 20px; font-size: 0.85rem;">
+      <p>These are third-party open source projects. Always verify licenses before commercial use.</p>
+    </div>
+  </div>
+</body>
+</html>

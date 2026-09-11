@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Creator Agent</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #1a1a1a; color: #fff; min-height: 100vh; }
+    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+    h1 { font-size: 2rem; margin-bottom: 20px; }
+    .section { background: #252525; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+    .section h2 { font-size: 1.3rem; margin-bottom: 15px; }
+    .btn { display: inline-block; background: #ff6b35; color: #fff; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: background 0.2s; }
+    .btn:hover { background: #e55a2b; }
+    .btn:disabled { background: #666; cursor: not-allowed; }
+    .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .card { background: #333; border-radius: 8px; overflow: hidden; padding: 16px; }
+    .card img { width: 100%; height: 140px; object-fit: cover; }
+    .card-info { padding: 12px; }
+    .card-info h3 { font-size: 1rem; margin-bottom: 4px; }
+    .card-info p { font-size: 0.85rem; color: #aaa; }
+    .progress-bar { height: 6px; background: #444; margin-top: 10px; }
+    .progress-fill { height: 100%; background: #ff6b35; width: 0%; transition: width 0.3s; }
+    .status-banner { padding: 12px; border-radius: 6px; margin-bottom: 16px; }
+    .status-ok { background: #2d5a3d; border: 1px solid #4a7c5c; }
+    .status-warning { background: #5a4a3d; border: 1px solid #7c6a4c; }
+    .status-error { background: #5a3d3d; border: 1px solid #7c4c4c; }
+    textarea { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #444; background: #333; color: #fff; font-family: inherit; resize: vertical; }
+    textarea:focus { outline: none; border-color: #ff6b35; }
+    .asset-list { margin-top: 16px; }
+    .asset-item { background: #333; padding: 12px; border-radius: 6px; margin-bottom: 8px; }
+    .hidden { display: none; }
+    .text-muted { color: #888; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>YouTube Creator Agent</h1>
+    
+    <div id="statusBanner" class="status-banner"></div>
+
+    <!-- Idea Generation -->
+    <div class="section">
+      <h2>Idea Generator</h2>
+      <p>Describe your video concept and I'll generate a detailed plan.</p>
+      <textarea id="ideaInput" rows="4" placeholder="e.g., a 60-second cooking tutorial with close-ups of ingredients, step-by-step instructions, and upbeat background music"></textarea>
+      <button class="btn" onclick="generatePlan()">Generate Plan</button>
+      <div id="planResult" class="hidden" style="margin-top:16px;"></div>
+    </div>
+
+    <!-- Video Clip Creation -->
+    <div class="section">
+      <h2>Create Video Clip</h2>
+      <p>Enter a prompt for a short video clip (4-8 seconds).</p>
+      <textarea id="clipPrompt" rows="4" placeholder="e.g., slow cinematic push-in on a warm coffee shop window during rain, neon reflections on wet pavement"></textarea>
+      <button class="btn" onclick="generateClip()">Generate Clip</button>
+      <div id="clipResult" class="hidden" style="margin-top:16px;"></div>
+    </div>
+
+    <!-- Music Generation -->
+    <div class="section">
+      <h2>Background Music</h2>
+      <p>Generate a royalty-free music track to pair with your video.</p>
+      <textarea id="musicPrompt" rows="4" placeholder="e.g., futuristic arcade menu theme, synthwave pads, arpeggiated bass, no vocals, seamless loop"></textarea>
+      <button class="btn" onclick="generateMusic()">Generate Music</button>
+      <div id="musicResult" class="hidden" style="margin-top:16px;"></div>
+    </div>
+
+    <!-- Image Generation -->
+    <div class="section">
+      <h2>Create Thumbnail</h2>
+      <p>Generate a custom thumbnail image for your video.</p>
+      <textarea id="thumbPrompt" rows="4" placeholder="e.g., minimal flat logo, coffee cup, warm orange on cream"></textarea>
+      <button class="btn" onclick="generateThumbnail()">Generate Thumbnail</button>
+      <div id="thumbResult" class="hidden" style="margin-top:16px;"></div>
+    </div>
+
+    <!-- Video Assembly -->
+    <div class="section">
+      <h2>Assemble Video</h2>
+      <p>Combine your generated assets into a complete video.</p>
+      <textarea id="scriptInput" rows="4" placeholder="Enter your video script here, with numbered scenes..."></textarea>
+      <button class="btn" onclick="assembleVideo()">Assemble Video</button>
+      <div id="assemblyResult" class="hidden" style="margin-top:16px;"></div>
+    </div>
+
+    <!-- Assets List -->
+    <div class="section">
+      <h2>Generated Assets</h2>
+      <button class="btn" onclick="loadAssets()">Refresh Assets</button>
+      <div id="assetsList" class="asset-list"></div>
+    </div>
+
+    <!-- Download / Export -->
+    <div class="section">
+      <h2>Download / Export</h2>
+      <button class="btn" onclick="downloadAll()">Download All Assets</button>
+      <button class="btn" onclick="uploadToYouTube()">Upload to YouTube</button>
+    </div>
+  </div>
+
+  <script>
+    let vibekitApiAvailable = null;
+
+    // Check VibeKit API availability on load
+    async function checkVibekitStatus() {
+      try {
+        const response = await fetch('/api/vibekit-status');
+        const data = await response.json();
+        vibekitApiAvailable = data.available;
+        
+        const banner = document.getElementById('statusBanner');
+        banner.className = 'status-banner';
+        
+        if (data.available) {
+          banner.classList.add('status-ok');
+          banner.innerHTML = '<strong>Status:</strong> All features available (VibeKit API connected)';
+        } else {
+          banner.classList.add('status-warning');
+          banner.innerHTML = '<strong>Status:</strong> VibeKit API not configured in this environment. Media generation (video, music, images) requires the VibeKit API. You can still use the Idea Generator and download features. Contact the agent for media generation.';
+        }
+      } catch (error) {
+        console.error('Failed to check VibeKit status:', error);
+      }
+    }
+
+    // Generate a video plan
+    async function generatePlan() {
+      const concept = document.getElementById('ideaInput').value.trim();
+      if (!concept) {
+        alert('Please enter a video concept');
+        return;
+      }
+
+      const resultDiv = document.getElementById('planResult');
+      resultDiv.classList.remove('hidden');
+      resultDiv.innerHTML = '<p>Generating plan...</p>';
+
+      try {
+        const response = await fetch('/api/generate-plan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ concept })
+        });
+
+        const data = await response.json();
+        
+        if (data.success) {
+          resultDiv.innerHTML = `
+            <h3>Video Plan</h3>
+            <pre style="white-space: pre-wrap; background: #444; padding: 12px; border-radius: 6px; overflow-x: auto;">${escapeHtml(data.plan)}</pre>
+            <p class="text-muted">Plan ID: ${data.planId}</p>
+          `;
+        } else {
+          resultDiv.innerHTML = `<p style="color: #ff6b6b;">Error: ${escapeHtml(data.error || 'Unknown error')}</p>`;
+        }
+      } catch (error) {
+        resultDiv.innerHTML = `<p style="color: #ff6b6b;">Error: ${escapeHtml(error.message)}</p>`;
+      }
+    }
+
+    // Generate a video clip
+    async function generateClip() {
+      if (!vibekitApiAvailable) {
+        alert('VibeKit API not available in this environment. Please contact the agent directly for media generation.');
+        return;
+      }
+
+      const prompt = document.getElementById('clipPrompt').value.trim();
+      if (!prompt) {
+        alert('Please enter a video prompt');
+        return;
+      }
+
+      const resultDiv = document.getElementById('clipResult');
+      resultDiv.classList.remove('hidden');
+      resultDiv.innerHTML = '<p>Generating clip...</p>';
+
+      try {
+        const response = await fetch('/api/generate-video', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt, duration: 4, resolution: '720p', aspect_ratio: '16:9' })
+        });
+
+        const data = await response.json();
+        
+        if (data.success) {
+          resultDiv.innerHTML = `<p>Clip generated successfully! Path: ${escapeHtml(data.path)}</p>`;
+          loadAssets();
+        } else {
+          resultDiv.innerHTML = `<p style="color: #ff6b6b;">Error: ${escapeHtml(data.error || 'Unknown error')}</p>`;
+        }
+      } catch (error) {
+        resultDiv.innerHTML = `<p style="color: #ff6b6b;">Error: ${escapeHtml(error.message)}</p>`;
+      }
+    }
+
+    // Generate music
+    async function generateMusic() {
+      if (!vibekitApiAvailable) {
+        alert('VibeKit API not available in this environment. Please contact the agent directly for media generation.');
+        return;
+      }
+
+      const prompt = document.getElementById('musicPrompt').value.trim();
+      if (!prompt) {
+        alert('Please enter a music prompt');
+        return;
+      }
+
+      const resultDiv = document.getElementById('musicResult');
+      resultDiv.classList.remove('hidden');
+      resultDiv.innerHTML = '<p>Generating music...</p>';
+
+      try {
+        const response = await fetch('/api/generate-music', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt })
+        });
+
+        const data = await response.json();
+        
+        if (data.success) {
+          resultDiv.innerHTML = `<p>Music generated successfully! Path: ${escapeHtml(data.path)}</p>`;
+          loadAssets();
+        } else {
+          resultDiv.innerHTML = `<p style="color: #ff6b6b;">Error: ${escapeHtml(data.error || 'Unknown error')}</p>`;
+        }
+      } catch (error) {
+        resultDiv.innerHTML = `<p style="color: #ff6b6b;">Error: ${escapeHtml(error.message)}</p>`;
+      }
+    }
+
+    // Generate thumbnail
+    async function generateThumbnail() {
+      if (!vibekitApiAvailable) {
+        alert('VibeKit API not available in this environment. Please contact the agent directly for media generation.');
+        return;
+      }
+
+      const prompt = document.getElementById('thumbPrompt').value.trim();
+      if (!prompt) {
+        alert('Please enter a thumbnail prompt');
+        return;
+      }
+
+      const resultDiv = document.getElementById('thumbResult');
+      resultDiv.classList.remove('hidden');
+      resultDiv.innerHTML = '<p>Generating thumbnail...</p>';
+
+      try {
+        const response = await fetch('/api/generate-image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt, aspect_ratio: '16:9' })
+        });
+
+        const data = await response.json();
+        
+        if (data.success) {
+          resultDiv.innerHTML = `<p>Thumbnail generated successfully! Path: ${escapeHtml(data.path)}</p>`;
+          loadAssets();
+        } else {
+          resultDiv.innerHTML = `<p style="color: #ff6b6b;">Error: ${escapeHtml(data.error || 'Unknown error')}</p>`;
+        }
+      } catch (error) {
+        resultDiv.innerHTML = `<p style="color: #ff6b6b;">Error: ${escapeHtml(error.message)}</p>`;
+      }
+    }
+
+    // Assemble video from script
+    async function assembleVideo() {
+      if (!vibekitApiAvailable) {
+        alert('VibeKit API not available in this environment. Please contact the agent directly for media generation.');
+        return;
+      }
+
+      const script = document.getElementById('scriptInput').value.trim();
+      if (!script) {
+        alert('Please enter a video script');
+        return;
+      }
+
+      const resultDiv = document.getElementById('assemblyResult');
+      resultDiv.classList.remove('hidden');
+      resultDiv.innerHTML = '<p>Assembling video...</p>';
+
+      try {
+        const response = await fetch('/api/assemble-video', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ script, style: 'professional' })
+        });
+
+        const data = await response.json();
+        
+        if (data.success) {
+          resultDiv.innerHTML = `
+            <p>Video assembled with ${data.totalClips} clips!</p>
+            <p>Assembly ID: ${data.assemblyId}</p>
+          `;
+          loadAssets();
+        } else {
+          resultDiv.innerHTML = `<p style="color: #ff6b6b;">Error: ${escapeHtml(data.error || 'Unknown error')}</p>`;
+        }
+      } catch (error) {
+        resultDiv.innerHTML = `<p style="color: #ff6b6b;">Error: ${escapeHtml(error.message)}</p>`;
+      }
+    }
+
+    // Load and display all assets
+    async function loadAssets() {
+      try {
+        const response = await fetch('/api/assets');
+        const data = await response.json();
+        
+        const assetsList = document.getElementById('assetsList');
+        let html = '';
+        
+        if (Object.keys(data.videos).length === 0 && Object.keys(data.music).length === 0 && Object.keys(data.images).length === 0) {
+          html = '<p class="text-muted">No assets generated yet.</p>';
+        } else {
+          if (Object.keys(data.videos).length > 0) {
+            html += '<h3>Videos</h3>';
+            for (const [id, video] of Object.entries(data.videos)) {
+              html += `<div class="asset-item"><strong>${escapeHtml(video.prompt || 'Clip')}</strong> - ${escapeHtml(id)}</div>`;
+            }
+          }
+          if (Object.keys(data.music).length > 0) {
+            html += '<h3>Music</h3>';
+            for (const [id, music] of Object.entries(data.music)) {
+              html += `<div class="asset-item"><strong>${escapeHtml(music.prompt || 'Track')}</strong> - ${escapeHtml(id)}</div>`;
+            }
+          }
+          if (Object.keys(data.images).length > 0) {
+            html += '<h3>Images</h3>';
+            for (const [id, image] of Object.entries(data.images)) {
+              html += `<div class="asset-item"><strong>${escapeHtml(image.prompt || 'Image')}</strong> - ${escapeHtml(id)}</div>`;
+            }
+          }
+        }
+        
+        assetsList.innerHTML = html;
+      } catch (error) {
+        console.error('Failed to load assets:', error);
+      }
+    }
+
+    // Download all assets
+    function downloadAll() {
+      alert('Download feature would package all generated assets into a zip file.');
+    }
+
+    // Upload to YouTube
+    function uploadToYouTube() {
+      alert('To upload to YouTube, please connect your YouTube account in the app\'s Connections section.');
+    }
+
+    // Helper function to escape HTML
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Initialize
+    checkVibekitStatus();
+  </script>
+</body>
+</html>
