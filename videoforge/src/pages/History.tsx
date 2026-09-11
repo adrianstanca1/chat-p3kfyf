@@ -8,6 +8,7 @@ interface HistoryItem {
   avatar: string;
   date: string;
   status: string;
+  thumbnail?: string;
 }
 
 export default function History() {
@@ -65,6 +66,18 @@ export default function History() {
                 <span>👤 {item.avatar}</span>
                 <span>{item.aspect}</span>
               </div>
+              {item.thumbnail && (
+                <div className="mt-3">
+                  <video
+                    src={item.thumbnail}
+                    controls
+                    className="w-full rounded-lg"
+                    onError={(e) => {
+                      (e.target as HTMLVideoElement).style.display = 'none';
+                    }}
+                  />
+                </div>
+              )}
             </div>
           ))}
         </div>

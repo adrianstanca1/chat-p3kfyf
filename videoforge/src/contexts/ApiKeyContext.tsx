@@ -7,6 +7,13 @@ export interface ApiKeys {
   heygen?: string;
   runway?: string;
   did?: string;
+  // Additional free models & resources
+  deepseek?: string;
+  expo_robot?: string;
+  openrouter?: string;
+  moonshot?: string;
+  sendgrid?: string;
+  ollama?: string;
 }
 
 interface ApiKeyContextType {

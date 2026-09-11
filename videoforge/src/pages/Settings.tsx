@@ -7,6 +7,13 @@ const SERVICES = [
   { id: 'openai', name: 'OpenAI (GPT-4o)', url: 'https://platform.openai.com/api-keys', desc: 'For script generation and AI' },
   { id: 'did', name: 'D-ID (Avatars)', url: 'https://studio.d-id.com/api-keys', desc: 'Alternative avatar provider' },
   { id: 'runway', name: 'Runway Gen-2', url: 'https://runwayml.com/api-keys', desc: 'For AI video generation' },
+  // Additional free models & resources
+  { id: 'deepseek', name: 'DeepSeek (Tokenharbour)', url: 'https://tokenharbour.ai', desc: 'Free DeepSeek API access' },
+  { id: 'expo_robot', name: 'Expo Robot', url: 'https://expo_robot.com', desc: 'Free automation API access' },
+  { id: 'openrouter', name: 'OpenRouter', url: 'https://openrouter.ai/api-keys', desc: 'Free access to multiple models' },
+  { id: 'moonshot', name: 'Moonshot AI', url: 'https://platform.moonshot.cn', desc: 'Free model access' },
+  { id: 'sendgrid', name: 'SendGrid', url: 'https://www.twilio.com/products/1032/sendgrid', desc: 'Email automation' },
+  { id: 'ollama', name: 'Ollama', url: 'https://ollama.com', desc: 'Local model API access' },
 ];
 
 export default function Settings() {
@@ -18,7 +25,6 @@ export default function Settings() {
     const key = keys[svc as keyof ApiKeys] || '';
     if (!key) return;
     try {
-      // Basic validation: check if key looks valid
       if (key.length < 10) throw new Error('Key too short');
       setTested(p => ({ ...p, [svc]: true }));
       setTimeout(() => setTested(p => ({ ...p, [svc]: false })), 3000);
